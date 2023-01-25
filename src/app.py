@@ -30,7 +30,7 @@ def index():
     status_1_count = cursor.fetchone()[0]
     cursor.execute("SELECT title FROM pages WHERE status = 0 ORDER BY date ASC LIMIT 50")
     pages_list = cursor.fetchall()
-    return render_template("pages.html", total_count=total_count, status_0_count=status_0_count,
+    return render_template("templates/pages.html", total_count=total_count, status_0_count=status_0_count,
                            status_1_count=status_1_count, pages_list=pages_list)
 
 @app.route("/pages")
@@ -47,7 +47,7 @@ def pages():
     total_count = cursor.fetchone()[0]
     pages = cursor.execute("SELECT title, status, date FROM pages LIMIT ? OFFSET ?",
                            (per_page, (page - 1) * per_page)).fetchall()
-    return render_template("index.html", pages=pages, total_count=total_count, page=page, per_page=per_page)
+    return render_template("templates/index.html", pages=pages, total_count=total_count, page=page, per_page=per_page)
 
 if __name__ == "main":
     app.run()

@@ -1,7 +1,6 @@
 #!/bin/bash
 # shellcheck disable=SC1090
-set -euo pipefail
-
+#set -euo pipefail
 
 
 function setup-venv {
