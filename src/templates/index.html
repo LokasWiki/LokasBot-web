@@ -8,22 +8,26 @@
       rel="stylesheet"
       href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap/5.2.2/css/bootstrap.min.css"
     />
-    <title>Pages</title>
+    <title>قائمة الصفحات التي في قائمة الانتظار</title>
   </head>
   <body>
     <div class="container">
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>Title</th>
-            <th>Status</th>
-            <th>Date</th>
+            <th>اسم المقال</th>
+            <th>حالة المقال</th>
+            <th>تاريخ الاضافه الي قائمة البوت</th>
           </tr>
         </thead>
         <tbody>
           {% for page in pages %}
           <tr>
-            <td>{{ page[0] }}</td>
+            <td>
+                <a href="https://ar.wikipedia.org/wiki/{{ page[0] }}">
+                            {{ page[0] }}
+                </a>
+            </td>
             <td>
                 {% if page[1] == 0%}
                     في الانتظار

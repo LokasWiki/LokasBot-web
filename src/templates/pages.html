@@ -9,12 +9,12 @@
 </head>
 <body>
 <div class="container">
-    <h1 class="text-center mt-5">Pages</h1>
+    <h1 class="text-center mt-5">قائمة الصفحات التي في قائمة الانتظار الحالية</h1>
     <div class="row">
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Total count</h5>
+                    <h5 class="card-title">العدد الاجمالي</h5>
                     <p class="card-text">{{ total_count }}</p>
                 </div>
             </div>
@@ -22,7 +22,7 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Status 0 count</h5>
+                    <h5 class="card-title">عدد الصفحات التي في حالة الانتظار</h5>
                     <p class="card-text">{{ status_0_count }}</p>
                 </div>
             </div>
@@ -30,7 +30,7 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Status 1 count</h5>
+                    <h5 class="card-title">عدد الصفحات التي في حاله الفحص الان</h5>
                     <p class="card-text">{{ status_1_count }}</p>
                 </div>
             </div>
@@ -41,13 +41,17 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th>Title</th>
+                    <th>العنوان</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for page in pages_list %}
                 <tr>
-                    <td>{{ page[0] }}</td>
+                    <td>
+                        <a href="https://ar.wikipedia.org/wiki/{{ page[0] }}">
+                            {{ page[0] }}
+                        </a>
+                    </td>
                 </tr>
                 {% endfor %}
                 </tbody>
