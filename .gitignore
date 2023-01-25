@@ -26,3 +26,4 @@ docs/_build/
 .vscode/
 Requests
 users_this_week
+/__pycache__
