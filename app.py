@@ -5,6 +5,9 @@ import sqlite3
 
 app = Flask(__name__)
 
+__dir__ = os.path.dirname(__file__)
+
+
 
 def get_db(name):
     # This will create a pages.db file in the home directory of the user running the script.
