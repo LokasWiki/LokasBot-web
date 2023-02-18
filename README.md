@@ -10,6 +10,8 @@ Your tool will need a service account with rights to query across namespaces.
     $ become $TOOL_NAME
     ```
 -   ```
+    webservice --backend=kubernetes python3.9 stop
+    rm -fdr $HOME/www/python/src
     mkdir -p $HOME/www/python
     git clone https://github.com/loka1/LokasBot-web.git $HOME/www/python/src
     webservice --backend=kubernetes python3.9 shell
