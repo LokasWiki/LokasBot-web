@@ -3,12 +3,7 @@ LokasBot website
 
 Deploy on Toolforge
 -------------------
-Your tool will need a service account with rights to query across namespaces.
 
--   ```
-    $ ssh dev.toolforge.org
-    $ become $TOOL_NAME
-    ```
 -   ```
     webservice --backend=kubernetes python3.9 stop
     rm -fdr $HOME/www/python/src
