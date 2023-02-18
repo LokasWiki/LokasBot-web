@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>home page</title>
+    <link
+      rel="stylesheet"
+      href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap/5.2.2/css/bootstrap.min.css"
+    />
+</head>
+<body dir="rtl">
+    <h1 class="my-2">قائمة الصفحات</h1>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a  class="nav-link" href="{{ url_for('maintenance_index') }}">1 ) تتبع حاله المهمه (بوت:صيانة المقالات)</a>
+        </li>
+        <li class="nav-item">
+            <a  class="nav-link" href="{{ url_for('webcite_index') }}">2 ) تتبع حاله المهمه (بوت:الإبلاغ عن رابط معطوب أو مؤرشف)</a>
+        </li>
+    </ul>
+</body>
+</html>
