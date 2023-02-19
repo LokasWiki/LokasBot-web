@@ -23,7 +23,7 @@ def to_dict(row):
         status = "جاري العمل"
 
     return {
-        'id': row[0],
+        'page_id': row[0],
         'link': '<a  target="_blank"  href="https://ar.wikipedia.org/wiki/' + row[1] + '">' + row[1] + '</a>',
         'status': status,
         'data': row[3]
@@ -51,7 +51,8 @@ def task_index(name):
     cursor.execute("SELECT title,date FROM pages WHERE status = 1 ORDER BY date ASC")
     pages_list = cursor.fetchall()
     return render_template("index.html", total_count=total_count, status_0_count=status_0_count,
-                           status_1_count=status_1_count, pages_list=pages_list, all_url=url_for('list_of_pages_in_tasks',name=name))
+                           status_1_count=status_1_count, pages_list=pages_list,
+                           all_url=url_for('list_of_pages_in_tasks', name=name))
 
 
 @app.route("/tasks/<name>/pages")
@@ -69,9 +70,45 @@ def pages_list_api(name):
 
     cursor = get_db(escape(name) + ".db")
 
-    pages = cursor.execute("SELECT id,title, status, date FROM pages LIMIT 100").fetchall()
+    query = ""
+    # search filter
+    search = request.args.get('search[value]')
+    if search:
+        query += f" where title like '%{search}%' "
 
-    return {'data': [to_dict(page) for page in pages]}
+    cursor.execute(f"SELECT COUNT(*) FROM pages {query}")
+    total_filtered = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(*) FROM pages")
+    recordsTotal = cursor.fetchone()[0]
+
+    order_str = ""
+    i = 0
+    while True:
+        col_index = request.args.get(f'order[{i}][column]')
+        if col_index is None:
+            break
+        col_name = request.args.get(f'columns[{col_index}][data]')
+        if col_name not in ["id","title", "status", "date"]:
+            col_name = 'id'
+        descending = request.args.get(f'order[{i}][dir]') == 'desc'
+        order_str += f"{col_name} {('desc' if descending else 'asc')},"
+        i += 1
+
+    if order_str:
+        order_str = " ORDER BY " + order_str[:-1]  # remove the trailing comma and add ORDER BY
+
+    # pagination
+    start = request.args.get('start', type=int)
+    length = request.args.get('length', type=int)
+    query_res = f"SELECT id,title, status, date FROM pages {query} {order_str} LIMIT {length} OFFSET {start}"
+    pages = cursor.execute(query_res).fetchall()
+
+    return {
+        'data': [to_dict(page) for page in pages],
+        'recordsFiltered': total_filtered,
+        'recordsTotal': recordsTotal,
+        'draw': request.args.get('draw', type=int),
+    }
 
 
 if __name__ == "main":

@@ -23,25 +23,7 @@
           </tr>
         </thead>
         <tbody>
-          {% for page in pages %}
-          <tr>
-            <td>
-                {{ page[0] }}
-            </td>
-            <td>
 
-            </td>
-            <td>
-                {% if page[2] == 0%}
-                    في الانتظار
-                {% else %}
-                    جاري العمل
-                {% endif %}
-            </td>
-
-            <td>{{ page[3] }}</td>
-          </tr>
-          {% endfor %}
         </tbody>
       </table>
     </div>
@@ -52,11 +34,13 @@
   <script type="text/javascript">
     $(document).ready(function () {
         $('#data').DataTable({
+        ajax: "{{url_for('pages_list_api',name=name)}}",
+        serverSide: true,
         columns: [
-          {orderable: true, searchable: true},
-          {orderable: true, searchable: true},
-          {orderable: true, searchable: true},
-          {orderable: true, searchable: true},
+          {orderable: true, searchable: false,data:"page_id"},
+          {orderable: true, searchable: true,data:"link"},
+          {orderable: true, searchable: false,data:"status"},
+          {orderable: true, searchable: false,data:"data"},
 
         ],
       });
