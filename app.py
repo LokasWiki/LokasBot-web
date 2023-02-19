@@ -24,7 +24,7 @@ def to_dict(row):
 
     return {
         'page_id': row[0],
-        'link': '<a  target="_blank"  href="https://ar.wikipedia.org/wiki/' + row[1] + '">' + row[1] + '</a>',
+        'link': row[1],
         'status': status,
         'data': row[3]
     }

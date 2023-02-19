@@ -85,7 +85,9 @@
         serverSide: true,
         columns: [
           {orderable: true, searchable: false,data:"page_id"},
-          {orderable: true, searchable: true,data:"link"},
+          {orderable: true, searchable: true,data:"link",  "mRender": function (data, type, row) {
+                    return '<a  target="_blank"  href="https://ar.wikipedia.org/wiki/' +data + '">' +data + '</a>';
+                }},
           {orderable: true, searchable: false,data:"status"},
           {orderable: true, searchable: false,data:"data"},
 
