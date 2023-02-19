@@ -1,61 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<html>
+<head>
+    <title>Pages</title>
     <link
       rel="stylesheet"
       href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap/5.2.2/css/bootstrap.min.css"
     />
-    <title>قائمة الصفحات التي في قائمة الانتظار</title>
-  </head>
-  <body>
-    <div class="container">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>اسم المقال</th>
-            <th>حالة المقال</th>
-            <th>تاريخ الاضافه الي قائمة البوت</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for page in pages %}
-          <tr>
-            <td>
-                <a  target="_blank"  href="https://ar.wikipedia.org/wiki/{{ page[0] }}">
-                            {{ page[0] }}
-                </a>
-            </td>
-            <td>
-                {% if page[1] == 0%}
-                    في الانتظار
-                {% else %}
-                    جاري العمل
-                {% endif %}
-            </td>
-
-            <td>{{ page[2] }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item {% if page == 1 %}disabled{% endif %}">
-            <a class="page-link" href="?page={{ page - 1 }}">Previous</a>
-          </li>
-          {% for i in range(1, total_count // per_page + 1) %}
-          <li class="page-item {% if i == page %}active{% endif %}">
-            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
-          </li>
-          {% endfor %}
-          <li class="page-item {% if page == total_count // per_page + 1 %}disabled{% endif %}">
-            <a class="page-link" href="?page={{ page + 1 }}">Next</a>
-          </li>
-</ul>
-      </nav>
+    <link rel="stylesheet" type="text/css" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/datatables/1.10.21/css/dataTables.bootstrap.css">
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center mt-5">(<a href="{{ all_url }}">عرض جميع الصفحات</a>) قائمة الصفحات التي في قائمة الانتظار الحالية</h1>
+    <hr>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">العدد الاجمالي</h5>
+                    <p class="card-text">{{ total_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">عدد الصفحات التي في حالة الانتظار</h5>
+                    <p class="card-text">{{ status_0_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">عدد الصفحات التي في حاله الفحص الان</h5>
+                    <p class="card-text">{{ status_1_count }}</p>
+                </div>
+            </div>
+        </div>
     </div>
-  </body>
+    <hr>
+    <h2 class="text-center">الصفحات التي في حاله الفحص الان</h2>
+    <div class="row ">
+        <div class="col-md-12">
+
+            <table id="data"  class="table table-striped">
+                <thead>
+                <tr>
+                    <th>العنوان</th>
+                    <th>تاريخ الاضافة</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for page in pages_list %}
+                <tr>
+                    <td>
+                        <a target="_blank" href="https://ar.wikipedia.org/wiki/{{ page[0] }}">
+                            {{ page[0] }}
+                        </a>
+                    </td>
+                    <td>
+                        {{ page[1] }}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+{#<script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/popper.js/2.11.6/cjs/popper.min.js"></script>#}
+<script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap/5.2.2/js/bootstrap.min.js"></script>
+<script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/datatables/1.10.21/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('#data').DataTable();
+    });
+  </script>
+</body>
 </html>

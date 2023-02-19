@@ -36,9 +36,9 @@ def maintenance_index():
     status_0_count = cursor.fetchone()[0]
     cursor.execute("SELECT COUNT(*) FROM pages WHERE status = 1")
     status_1_count = cursor.fetchone()[0]
-    cursor.execute("SELECT title FROM pages WHERE status = 0 ORDER BY date ASC LIMIT 50")
+    cursor.execute("SELECT title,date FROM pages WHERE status = 1 ORDER BY date")
     pages_list = cursor.fetchall()
-    return render_template("pages.html", total_count=total_count, status_0_count=status_0_count,
+    return render_template("index.html", total_count=total_count, status_0_count=status_0_count,
                            status_1_count=status_1_count, pages_list=pages_list,all_url=url_for('maintenance_pages'))
 
 
@@ -56,7 +56,7 @@ def maintenance_pages():
     total_count = cursor.fetchone()[0]
     pages = cursor.execute("SELECT title, status, date FROM pages LIMIT ? OFFSET ?",
                            (per_page, (page - 1) * per_page)).fetchall()
-    return render_template("index.html", pages=pages, total_count=total_count, page=page, per_page=per_page)
+    return render_template("pages.html", pages=pages, total_count=total_count, page=page, per_page=per_page)
 
 
 @app.route("/webcite")
@@ -73,9 +73,9 @@ def webcite_index():
     status_0_count = cursor.fetchone()[0]
     cursor.execute("SELECT COUNT(*) FROM pages WHERE status = 1")
     status_1_count = cursor.fetchone()[0]
-    cursor.execute("SELECT title FROM pages WHERE status = 0 ORDER BY date ASC LIMIT 50")
+    cursor.execute("SELECT title,date FROM pages WHERE status = 1 ORDER BY date ASC")
     pages_list = cursor.fetchall()
-    return render_template("pages.html", total_count=total_count, status_0_count=status_0_count,
+    return render_template("index.html", total_count=total_count, status_0_count=status_0_count,
                            status_1_count=status_1_count, pages_list=pages_list,all_url=url_for('webcite_pages'))
 
 
@@ -93,7 +93,7 @@ def webcite_pages():
     total_count = cursor.fetchone()[0]
     pages = cursor.execute("SELECT title, status, date FROM pages LIMIT ? OFFSET ?",
                            (per_page, (page - 1) * per_page)).fetchall()
-    return render_template("index.html", pages=pages, total_count=total_count, page=page, per_page=per_page)
+    return render_template("pages.html", pages=pages, total_count=total_count, page=page, per_page=per_page)
 
 
 if __name__ == "main":
