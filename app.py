@@ -25,7 +25,7 @@ def to_dict(row):
     return {
         'page_id': row[0],
         'link': row[1],
-        'status': status,
+        'status': row[2],
         'data': row[3],
         "thread": row[4]
     }

@@ -89,7 +89,9 @@
           {orderable: true, searchable: true,data:"link",  "mRender": function (data, type, row) {
                     return '<a  target="_blank"  href="https://ar.wikipedia.org/wiki/' +data + '">' +data + '</a>';
                 }},
-          {orderable: true, searchable: false,data:"status"},
+          {orderable: true, searchable: false,data:"status","mRender": function (data, type, row) {
+                    return data === 1 ? "جاري العمل" : "في الانتظار";
+          }},
           {orderable: true, searchable: false,data:"data"},
           {orderable: true, searchable: true,data:"thread"},
 
