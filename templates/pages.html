@@ -1,67 +1,97 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Pages</title>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link
       rel="stylesheet"
       href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap/5.2.2/css/bootstrap.min.css"
     />
-</head>
-<body>
-<div class="container">
-    <h1 class="text-center mt-5">(<a href="{{ all_url }}">عرض جميع الصفحات</a>) قائمة الصفحات التي في قائمة الانتظار الحالية</h1>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">العدد الاجمالي</h5>
-                    <p class="card-text">{{ total_count }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">عدد الصفحات التي في حالة الانتظار</h5>
-                    <p class="card-text">{{ status_0_count }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">عدد الصفحات التي في حاله الفحص الان</h5>
-                    <p class="card-text">{{ status_1_count }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row mt-5">
-        <div class="col-md-12">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>العنوان</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for page in pages_list %}
-                <tr>
-                    <td>
-                        <a target="_blank" href="https://ar.wikipedia.org/wiki/{{ page[0] }}">
-                            {{ page[0] }}
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-<script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.6.1/jquery.slim.min.js"></script>
-<script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/popper.js/2.11.6/cjs/popper.min.js"></script>
-<script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap/5.2.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/datatables/1.10.21/css/dataTables.bootstrap.css">
+      <style>
+          .dataTables_paginate {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
 
-</body>
+.dataTables_paginate .pagination {
+  margin: 0;
+}
+
+.dataTables_paginate .paginate_button {
+  display: inline-block;
+  margin-right: 5px;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 5px 10px;
+  color: #333;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+.dataTables_paginate .paginate_button:hover {
+  background-color: #f5f5f5;
+}
+
+.dataTables_paginate .paginate_button.active {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.dataTables_paginate .previous, .dataTables_paginate .next {
+  margin-right: 10px;
+}
+
+.dataTables_paginate .disabled a {
+  color: #999;
+  pointer-events: none;
+}
+
+.dataTables_paginate .disabled .page-link {
+  background-color: #fff;
+  border-color: #ddd;
+}
+
+      </style>
+    <title>قائمة الصفحات التي في قائمة الانتظار</title>
+  </head>
+  <body>
+    <div class="container">
+      <table id="data" class="table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>اسم المقال</th>
+            <th>حالة المقال</th>
+            <th>تاريخ الاضافه الي قائمة البوت</th>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+    </div>
+  <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap/5.2.2/js/bootstrap.min.js"></script>
+<script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/datatables/1.10.21/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+        $('#data').DataTable({
+        ajax: "{{url_for('pages_list_api',name=name)}}",
+        serverSide: true,
+        columns: [
+          {orderable: true, searchable: false,data:"page_id"},
+          {orderable: true, searchable: true,data:"link"},
+          {orderable: true, searchable: false,data:"status"},
+          {orderable: true, searchable: false,data:"data"},
+
+        ],
+      });
+    });
+  </script>
+  </body>
 </html>
