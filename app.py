@@ -76,7 +76,7 @@ def pages_list_api(name):
     search = request.args.get('search[value]')
     if search:
         query += f" where title like '%{search}%' "
-        query += f" or title thread ={search} "
+        query += f" or thread ={int(search)} "
 
     cursor.execute(f"SELECT COUNT(*) FROM pages {query}")
     total_filtered = cursor.fetchone()[0]
