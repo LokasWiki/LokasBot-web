@@ -26,7 +26,8 @@ def to_dict(row):
         'page_id': row[0],
         'link': row[1],
         'status': status,
-        'data': row[3]
+        'data': row[3],
+        "thread": row[4]
     }
 
 
@@ -48,7 +49,7 @@ def task_index(name):
     status_0_count = cursor.fetchone()[0]
     cursor.execute("SELECT COUNT(*) FROM pages WHERE status = 1")
     status_1_count = cursor.fetchone()[0]
-    cursor.execute("SELECT title,date FROM pages WHERE status = 1 ORDER BY date ASC")
+    cursor.execute("SELECT title,date,thread FROM pages WHERE status = 1 ORDER BY date ASC")
     pages_list = cursor.fetchall()
     return render_template("index.html", total_count=total_count, status_0_count=status_0_count,
                            status_1_count=status_1_count, pages_list=pages_list,
@@ -75,6 +76,7 @@ def pages_list_api(name):
     search = request.args.get('search[value]')
     if search:
         query += f" where title like '%{search}%' "
+        query += f" or title thread ={search} "
 
     cursor.execute(f"SELECT COUNT(*) FROM pages {query}")
     total_filtered = cursor.fetchone()[0]
@@ -88,7 +90,7 @@ def pages_list_api(name):
         if col_index is None:
             break
         col_name = request.args.get(f'columns[{col_index}][data]')
-        if col_name not in ["id","title", "status", "date"]:
+        if col_name not in ["id","title", "status", "date","thread"]:
             col_name = 'id'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
         order_str += f"{col_name} {('desc' if descending else 'asc')},"
@@ -100,7 +102,7 @@ def pages_list_api(name):
     # pagination
     start = request.args.get('start', type=int)
     length = request.args.get('length', type=int)
-    query_res = f"SELECT id,title, status, date FROM pages {query} {order_str} LIMIT {length} OFFSET {start}"
+    query_res = f"SELECT id,title, status, date,thread FROM pages {query} {order_str} LIMIT {length} OFFSET {start}"
     pages = cursor.execute(query_res).fetchall()
 
     return {
