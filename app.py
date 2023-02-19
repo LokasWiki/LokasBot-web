@@ -1,12 +1,12 @@
 import os
+from markupsafe import escape
 
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request, url_for, abort
 import sqlite3
 
 app = Flask(__name__)
 
 __dir__ = os.path.dirname(__file__)
-
 
 
 def get_db(name):
@@ -17,55 +17,30 @@ def get_db(name):
     return conn.cursor()
 
 
+def to_dict(row):
+    status = "في الانتظار"
+    if row[2] == 1:
+        status = "جاري العمل"
+
+    return {
+        'id': row[0],
+        'link': '<a  target="_blank"  href="https://ar.wikipedia.org/wiki/' + row[1] + '">' + row[1] + '</a>',
+        'status': status,
+        'data': row[3]
+    }
+
+
 @app.route('/')
 def index():
     return render_template("home.html")
 
 
-@app.route("/maintenance")
-def maintenance_index():
-    cursor = get_db("maintenance.db")
+@app.route("/tasks/<name>")
+def task_index(name):
+    if escape(name) not in ["maintenance", "webcite"]:
+        abort(404)
 
-    # Create the table with a status column
-    cursor.execute(
-        '''CREATE TABLE IF NOT EXISTS pages (title TEXT PRIMARY KEY, status INTEGER, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
-
-    cursor.execute("SELECT COUNT(*) FROM pages")
-    total_count = cursor.fetchone()[0]
-    cursor.execute("SELECT COUNT(*) FROM pages WHERE status = 0")
-    status_0_count = cursor.fetchone()[0]
-    cursor.execute("SELECT COUNT(*) FROM pages WHERE status = 1")
-    status_1_count = cursor.fetchone()[0]
-    cursor.execute("SELECT title,date FROM pages WHERE status = 1 ORDER BY date")
-    pages_list = cursor.fetchall()
-    return render_template("index.html", total_count=total_count, status_0_count=status_0_count,
-                           status_1_count=status_1_count, pages_list=pages_list,all_url=url_for('maintenance_pages'))
-
-
-@app.route("/maintenance/pages")
-def maintenance_pages():
-    cursor = get_db("maintenance.db")
-
-    # Create the table with a status column
-    cursor.execute(
-        '''CREATE TABLE IF NOT EXISTS pages (title TEXT PRIMARY KEY, status INTEGER, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
-
-    page = request.args.get("page", 1, type=int)
-    per_page = 100
-    cursor.execute("SELECT COUNT(*) FROM pages")
-    total_count = cursor.fetchone()[0]
-    pages = cursor.execute("SELECT title, status, date FROM pages LIMIT ? OFFSET ?",
-                           (per_page, (page - 1) * per_page)).fetchall()
-    return render_template("pages.html", pages=pages, total_count=total_count, page=page, per_page=per_page)
-
-
-@app.route("/webcite")
-def webcite_index():
-    cursor = get_db("webcite.db")
-
-    # Create the table with a status column
-    cursor.execute(
-        '''CREATE TABLE IF NOT EXISTS pages (title TEXT PRIMARY KEY, status INTEGER, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
+    cursor = get_db(escape(name) + ".db")
 
     cursor.execute("SELECT COUNT(*) FROM pages")
     total_count = cursor.fetchone()[0]
@@ -76,24 +51,27 @@ def webcite_index():
     cursor.execute("SELECT title,date FROM pages WHERE status = 1 ORDER BY date ASC")
     pages_list = cursor.fetchall()
     return render_template("index.html", total_count=total_count, status_0_count=status_0_count,
-                           status_1_count=status_1_count, pages_list=pages_list,all_url=url_for('webcite_pages'))
+                           status_1_count=status_1_count, pages_list=pages_list, all_url=url_for('list_of_pages_in_tasks',name=name))
 
 
-@app.route("/webcite/pages")
-def webcite_pages():
-    cursor = get_db("webcite.db")
+@app.route("/tasks/<name>/pages")
+def list_of_pages_in_tasks(name):
+    if escape(name) not in ["maintenance", "webcite"]:
+        abort(404)
 
-    # Create the table with a status column
-    cursor.execute(
-        '''CREATE TABLE IF NOT EXISTS pages (title TEXT PRIMARY KEY, status INTEGER, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
+    return render_template("pages.html", name=name)
 
-    page = request.args.get("page", 1, type=int)
-    per_page = 100
-    cursor.execute("SELECT COUNT(*) FROM pages")
-    total_count = cursor.fetchone()[0]
-    pages = cursor.execute("SELECT title, status, date FROM pages LIMIT ? OFFSET ?",
-                           (per_page, (page - 1) * per_page)).fetchall()
-    return render_template("pages.html", pages=pages, total_count=total_count, page=page, per_page=per_page)
+
+@app.route('/api/tasks/<name>/pages/data')
+def pages_list_api(name):
+    if escape(name) not in ["maintenance", "webcite"]:
+        abort(404)
+
+    cursor = get_db(escape(name) + ".db")
+
+    pages = cursor.execute("SELECT id,title, status, date FROM pages LIMIT 100").fetchall()
+
+    return {'data': [to_dict(page) for page in pages]}
 
 
 if __name__ == "main":
