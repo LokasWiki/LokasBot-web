@@ -36,6 +36,15 @@ def index():
     return render_template("home.html")
 
 
+@app.route("/tools/<name>")
+def list_of_tools(name):
+    if escape(name) not in ["wikidata_to_wiki"]:
+        abort(404)
+
+    return render_template(f"tools/{escape(name)}.html", name=name)
+
+
+
 @app.route("/tasks/<name>")
 def task_index(name):
     if escape(name) not in ["maintenance", "webcite"]:
