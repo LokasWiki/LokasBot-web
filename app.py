@@ -36,6 +36,12 @@ def index():
     return render_template("home.html")
 
 
+@app.route("/tools/words_Count")
+def words_count_tool_get():
+    return render_template(f"tools/words_count.html")
+
+
+
 @app.route("/tasks/<name>")
 def task_index(name):
     if escape(name) not in ["maintenance", "webcite"]:
