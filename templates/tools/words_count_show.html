@@ -12,6 +12,56 @@
     />
 </head>
 <body>
-<h1>test post page</h1>
+<form class="container my-5 text-center" method="post" action="{{ url_for('words_count_tool') }}">
+    <div class="shadow-lg bg-transparent p-5 border rounded-5">
+      <h1 class="display-4">حساب عدد الكلمات</h1>
+        <hr>
+      <p class="lead my-4">
+          تعرض هذه الصفحة عدد الكلمات التي يتم حسابها عبر بوت تحديد البذور حيث يحذف البوت قالب البذرة إذا كان أعلى من ٥٠٠ كلمة حسب عدد الكلمات التي يظهر في هذه الصفحة
+      </p>
+         {% for message in messages %}
+            <div class='alert alert-danger'>
+                <p>{{ message['content'] }}</p>
+            </div>
+        {% endfor %}
+      <div class="mb-3">
+        <input type="text" required class="form-control" id="title" name="title" placeholder="ضع هنا اسم المقال "
+            value="{{ request.form['title'] }}"
+        >
+      </div>
+      <button type="submit" class="btn btn-success btn-lg">اعرض عدد الكلمات</button>
+
+      <hr>
+        {% if status %}
+            <div  class="alert alert-danger">
+                <p>المقال تحقق شروط البذور</p>
+                <p>حيث عدد الكلمات المقال هو ({{result}}) وهو اقل من الحد الاقصي (٥٠٠) لعدد كلمات البذور</p>
+            </div>
+        {% else %}
+            <div class="alert alert-success">
+                <p>المقال  لا تحقق شروط البذور</p>
+                <p>حيث عدد الكلمات المقال هو ({{result}}) وهو اعلي من الحد الاقصي (٥٠٠) لعدد كلمات البذور</p>
+            </div>
+        {% endif %}
+
+        <h2>الكلمات التي يقوم بحسابها البوت بعد حذف الجدوال والقوالب والرابط</h2>
+        <pre  id="output" style="text-align:  right !important;"  class="shadow p-3 border rounded">
+            <div style="    white-space: pre-line;">
+                {{new_text}}
+            </div>
+        </pre>
+        <script >
+              const outputDiv = document.querySelector("#output > div")
+              const text = outputDiv.textContent;
+              const regex = /\p{L}+/gu;
+
+              const highlightedText = text.replace(regex, '<span style="background-color: yellow">$&</span>');
+              outputDiv.innerHTML = highlightedText;
+
+        </script>
+
+    </div>
+
+</form>
 </body>
 </html>
