@@ -1,12 +1,19 @@
 import os
-from markupsafe import escape
+import re
 
-from flask import Flask, render_template, request, url_for, abort
+import pywikibot
+from markupsafe import escape
+import pywikibot
+
+from flask import Flask, render_template, request, url_for, abort, request, url_for, flash, redirect
 import sqlite3
+import wikitextparser as wtp
 
 app = Flask(__name__)
 
 __dir__ = os.path.dirname(__file__)
+
+site = pywikibot.Site("ar", "wikipedia")
 
 
 def get_db(name):
@@ -36,13 +43,62 @@ def index():
     return render_template("home.html")
 
 
-@app.route("/tools/<name>")
-def list_of_tools(name):
-    if escape(name) not in ["wikidata_to_wiki"]:
-        abort(404)
+@app.route("/tools/words_Count", methods=('GET', 'POST'))
+def words_count_tool():
+    messages = []
+    if request.method == 'POST':
+        title = request.form['title']
+        if len(title.strip()) == 0:
+            messages.append({'content': "يجب ادخال اسم المقال"})
+        else:
+            page = pywikibot.Page(site, title)
+            if not page.exists():
+                messages.append({'content': "المقال غير موجودة"})
+            else:
+                if not page.namespace() == 0:
+                    messages.append({'content': "يجب ان تكون المقال ضمن نطاق المقالات"})
+                else:
+                    status = True
 
-    return render_template(f"tools/{escape(name)}.html", name=name)
+                    tem_text = page.text
 
+                    parsed = wtp.parse(tem_text)
+
+                    # remove cat links
+                    for link in parsed.wikilinks:
+                        if ":" in link.title:
+                            tem_text = tem_text.replace(str(link), "")
+                    parsed = wtp.parse(tem_text)
+                    # remove tables
+                    # remove template
+                    # remove html tag include ref tags
+                    # remove all comments
+                    # remove all external links
+                    tem_text = parsed.plain_text(
+                        replace_wikilinks=False,
+                        replace_bolds_and_italics=False
+                    )
+                    parsed = wtp.parse(tem_text)
+                    # replace all wikilinks to be like  [from|some text ] to from
+                    for wikilink in parsed.wikilinks:
+                        tem_text = tem_text.replace(str(wikilink), str(wikilink.title))
+
+                    # remove tables like this "{| |}"
+                    tem_text = re.sub(r"{|\|[.|\w|\W]*?\|}", "", tem_text)
+
+                    # remove numbers in string"
+                    tem_text = re.sub(r"\d+", "", tem_text)
+
+                    # get counts of words
+                    result = len(re.findall(r'\w+', tem_text))
+
+                    if result >= 500:
+                        # start remove template
+                        status = False
+
+                    return render_template(f"tools/words_count_show.html",new_text=tem_text,status=status,result=result)
+
+    return render_template(f"tools/words_count_form.html", messages=messages)
 
 
 @app.route("/tasks/<name>")
@@ -99,7 +155,7 @@ def pages_list_api(name):
         if col_index is None:
             break
         col_name = request.args.get(f'columns[{col_index}][data]')
-        if col_name not in ["id","title", "status", "date","thread"]:
+        if col_name not in ["id", "title", "status", "date", "thread"]:
             col_name = 'id'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
         order_str += f"{col_name} {('desc' if descending else 'asc')},"
