@@ -1,7 +1,7 @@
 import os
 from markupsafe import escape
 
-from flask import Flask, render_template, request, url_for, abort
+from flask import Flask, render_template, request, url_for, abort,request, url_for, flash, redirect
 import sqlite3
 
 app = Flask(__name__)
@@ -36,10 +36,13 @@ def index():
     return render_template("home.html")
 
 
-@app.route("/tools/words_Count")
-def words_count_tool_get():
-    return render_template(f"tools/words_count.html")
+@app.route("/tools/words_Count",methods=('GET', 'POST'))
+def words_count_tool():
+    if request.method == 'POST':
+        title = request.form['title']
+        return render_template(f"tools/words_count_show.html")
 
+    return render_template(f"tools/words_count_form.html")
 
 
 @app.route("/tasks/<name>")
