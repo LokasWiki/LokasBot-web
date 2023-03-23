@@ -13,7 +13,3 @@ SQLAlchemy == 2.0.2
 typing-extensions == 4.4.0
 waybackpy~=3.0.6
 wikitextparser~=0.51.1
-
-torch==2.0.0
-transformers==4.27.2
-tensorflow==2.12.0
