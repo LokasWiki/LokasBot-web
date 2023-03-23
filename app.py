@@ -1,7 +1,7 @@
 import os
 import re
 from transformers import pipeline
-
+import pytorch
 
 import pywikibot
 from markupsafe import escape
