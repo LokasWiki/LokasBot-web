@@ -1,5 +1,7 @@
 import os
 import re
+from transformers import pipeline
+
 
 import pywikibot
 from markupsafe import escape
@@ -15,6 +17,8 @@ __dir__ = os.path.dirname(__file__)
 
 site = pywikibot.Site("ar", "wikipedia")
 
+
+spam_classifier_generator = pipeline(model="lokas/spam-usernames-classifier")
 
 def get_db(name):
     # This will create a pages.db file in the home directory of the user running the script.
@@ -42,6 +46,15 @@ def to_dict(row):
 def index():
     return render_template("home.html")
 
+# Define a route for making predictions
+@app.route('/predict', methods=['POST'])
+def predict_view():
+    username = request.form['username']
+    prediction = spam_classifier_generator([username])
+    return {
+        "username": username,
+        "prediction": prediction,
+    }
 
 @app.route("/tools/words_Count", methods=('GET', 'POST'))
 def words_count_tool():
