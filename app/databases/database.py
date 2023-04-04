@@ -25,7 +25,7 @@ def shutdown_session(exception=None):
     db_session.remove()
 
 
-@click.command('init-db')
+@click.command('init-db2')
 def init_db_command():
     """Clear the existing data and create new tables."""
     init_db()
