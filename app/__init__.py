@@ -39,8 +39,8 @@ def create_app(test_config=None):
 
     # apply the blueprints to the app
     from . import auth, words_count_tool
-    app.register_blueprint(auth.bp, url_prefix="/auth")
-    app.register_blueprint(words_count_tool.bp, url_prefix="/tools/words_Count")
+    app.register_blueprint(auth.bp)
+    app.register_blueprint(words_count_tool.bp)
 
     print(app.url_map)
     return app

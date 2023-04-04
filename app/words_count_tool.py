@@ -4,7 +4,7 @@ import pywikibot
 import wikitextparser as wtp
 from flask import Blueprint, render_template, request
 
-bp = Blueprint('words_count_page', __name__)
+bp = Blueprint('words_count_page', __name__, url_prefix="/tools/words_Count")
 
 site = pywikibot.Site("ar", "wikipedia")
 
