@@ -4,8 +4,8 @@ import tempfile
 import pytest
 
 from app import create_app
-from app.db import get_db
-from app.db import init_db
+from app.databases.db import get_db
+from app.databases.db import init_db
 
 # read in SQL for populating test data
 with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:

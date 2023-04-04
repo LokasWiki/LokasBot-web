@@ -33,9 +33,11 @@ def create_app(test_config=None):
         return 'Hello, World!'
 
     # register the database commands
-    from . import db
+    from app.databases import db
+    from app.databases import database
 
     db.init_app(app)
+    database.init_app(app)
 
     # apply the blueprints to the app
     from . import auth, words_count_tool

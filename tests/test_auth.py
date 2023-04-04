@@ -2,7 +2,7 @@ import pytest
 from flask import g
 from flask import session
 
-from app.db import get_db
+from app.databases.db import get_db
 
 
 def test_register(client, app):
