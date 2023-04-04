@@ -12,17 +12,18 @@
     />
 </head>
 <body>
-<form class="container my-5 text-center" method="post" action="{{ url_for('words_count_tool') }}">
+<form action="{{ url_for('words_count_page.words_count_tool') }}" class="container my-5 text-center" method="post">
     <div class="shadow-lg bg-transparent p-5 border rounded-5">
-      <h1 class="display-4">حساب عدد الكلمات</h1>
+        <h1 class="display-4">حساب عدد الكلمات</h1>
         <hr>
-      <p class="lead my-4">
-          تعرض هذه الصفحة عدد الكلمات التي يتم حسابها عبر بوت تحديد البذور حيث يحذف البوت قالب البذرة إذا كان أعلى من ٥٠٠ كلمة حسب عدد الكلمات التي يظهر في هذه الصفحة
-      </p>
-         {% for message in messages %}
-            <div class='alert alert-danger'>
-                <p>{{ message['content'] }}</p>
-            </div>
+        <p class="lead my-4">
+            تعرض هذه الصفحة عدد الكلمات التي يتم حسابها عبر بوت تحديد البذور حيث يحذف البوت قالب البذرة إذا كان أعلى من
+            ٥٠٠ كلمة حسب عدد الكلمات التي يظهر في هذه الصفحة
+        </p>
+        {% for message in messages %}
+        <div class='alert alert-danger'>
+            <p>{{ message['content'] }}</p>
+        </div>
         {% endfor %}
       <div class="mb-3">
         <input type="text" required class="form-control" id="title" name="title" placeholder="ضع هنا اسم المقال "
