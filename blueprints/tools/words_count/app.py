@@ -9,7 +9,7 @@ words_count_page = Blueprint('words_count_page', __name__, template_folder='temp
 site = pywikibot.Site("ar", "wikipedia")
 
 
-@words_count_page.route("/tools/words_Count", methods=('GET', 'POST'))
+@words_count_page.route("/", methods=('GET', 'POST'))
 def words_count_tool():
     messages = []
     if request.method == 'POST':

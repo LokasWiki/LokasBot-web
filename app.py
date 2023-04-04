@@ -8,7 +8,7 @@ from markupsafe import escape
 from blueprints.tools.words_count.app import words_count_page
 
 app = Flask(__name__)
-app.register_blueprint(words_count_page)
+app.register_blueprint(words_count_page, url_prefix='/tools/words_Count')
 
 __dir__ = os.path.dirname(__file__)
 
