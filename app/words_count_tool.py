@@ -4,12 +4,12 @@ import pywikibot
 import wikitextparser as wtp
 from flask import Blueprint, render_template, request
 
-words_count_page = Blueprint('words_count_page', __name__, template_folder='templates')
+bp = Blueprint('words_count_page', __name__)
 
 site = pywikibot.Site("ar", "wikipedia")
 
 
-@words_count_page.route("/", methods=('GET', 'POST'))
+@bp.route("/", methods=('GET', 'POST'))
 def words_count_tool():
     messages = []
     if request.method == 'POST':
@@ -62,6 +62,6 @@ def words_count_tool():
                         # start remove template
                         status = False
 
-                    return render_template(f"words_count_show.html", new_text=tem_text, status=status, result=result)
+                    return render_template(f"words_count/show.html", new_text=tem_text, status=status, result=result)
 
-    return render_template(f"words_count_form.html", messages=messages)
+    return render_template(f"words_count/form.html", messages=messages)
