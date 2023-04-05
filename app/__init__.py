@@ -45,9 +45,10 @@ def create_app(test_config=None):
     database.init_app(app)
 
     # apply the blueprints to the app
-    from . import auth, words_count_tool
+    from . import auth, words_count_tool, tasks
     app.register_blueprint(auth.bp)
     app.register_blueprint(words_count_tool.bp)
+    app.register_blueprint(tasks.bp)
 
     print(app.url_map)
     return app
