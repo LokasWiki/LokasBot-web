@@ -61,6 +61,25 @@
 </head>
 <body>
 <div class="container mt-5">
+    <div class="row mt-3">
+        <div class="col-sm-6">
+            <label for="thread_number_search" class="form-label">بحث حسب رقم الخيط:</label>
+            <select id="thread-number-select" class="form-select">
+                <option value="">الكل</option>
+                <option value="1">الموضوع 1</option>
+                <option value="2">الموضوع 2</option>
+                <option value="3">الموضوع 3</option>
+            </select>
+        </div>
+        <div class="col-sm-6">
+            <label for="status_search" class="form-label">بحث حسب حالة المقال:</label>
+            <select class="form-select" id="status_search">
+                <option value="">الكل</option>
+                <option value="pending">في الانتظار</option>
+                <option value="in_progress">جاري العمل</option>
+            </select>
+        </div>
+    </div>
     <table id="data" class="table table-striped">
         <thead>
         <tr>
@@ -85,7 +104,7 @@
         src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#data').DataTable({
+        var table = $('#data').DataTable({
             ajax: "{{url_for('tasks.pages_list_api',name=name)}}",
             serverSide: true,
             columns: [
@@ -96,15 +115,23 @@
                     }
                 },
                 {
-                    orderable: true, searchable: false, data: "status", "mRender": function (data, type, row) {
+                    orderable: true, searchable: true, data: "status", "mRender": function (data, type, row) {
                         return data != "pending" ? "جاري العمل" : "في الانتظار";
                     }
                 },
                 {orderable: true, searchable: false, data: "create_date"},
                 {orderable: true, searchable: false, data: "update_date"},
-                {orderable: true, searchable: false, data: "thread_number"},
-
+                {orderable: true, searchable: true, data: "thread_number"},
             ],
+        });
+
+        // Add custom search box for thread_number and status columns
+        $('#thread_number_search').on('keyup', function () {
+            table.columns(5).search(this.value).draw();
+        });
+
+        $('#status_search').on('change', function () {
+            table.columns(2).search(this.value).draw();
         });
     });
 </script>
