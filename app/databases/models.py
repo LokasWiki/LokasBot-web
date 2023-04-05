@@ -31,5 +31,16 @@ class Page(Base):
     update_date: Mapped[datetime] = mapped_column(server_default=func.now(), onupdate=func.current_timestamp())
     task_name: Mapped[TaskName] = mapped_column(insert_default=TaskName.MAINTENANCE)
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'thread_number': self.thread_number,
+            'status': self.status.value,
+            'create_date': self.create_date.strftime('%Y-%m-%d %H:%M:%S'),
+            'update_date': self.update_date.strftime('%Y-%m-%d %H:%M:%S'),
+            'task_name': self.task_name.value
+        }
+
     def __repr__(self) -> str:
         return f"pages(id={self.id!r}, title={self.title!r})"

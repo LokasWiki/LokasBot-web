@@ -67,7 +67,8 @@
             <th>#</th>
             <th>اسم المقال</th>
             <th>حالة المقال</th>
-            <th>تاريخ الإضافة إلي قائمة البوت</th>
+            <th>تاريخ الإضافة</th>
+            <th>تاريخ التحديث</th>
             <th>thread number</th>
         </tr>
         </thead>
@@ -85,22 +86,23 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $('#data').DataTable({
-            ajax: "{{url_for('tasks.list_of_pages_in_tasks',name=name)}}",
+            ajax: "{{url_for('tasks.pages_list_api',name=name)}}",
             serverSide: true,
             columns: [
-                {orderable: true, searchable: false, data: "page_id"},
+                {orderable: true, searchable: false, data: "id"},
                 {
-                    orderable: true, searchable: true, data: "link", "mRender": function (data, type, row) {
+                    orderable: true, searchable: true, data: "title", "mRender": function (data, type, row) {
                         return '<a  target="_blank"  href="https://ar.wikipedia.org/wiki/' + data + '">' + data + '</a>';
                     }
                 },
                 {
                     orderable: true, searchable: false, data: "status", "mRender": function (data, type, row) {
-                        return data === 1 ? "جاري العمل" : "في الانتظار";
+                        return data != "pending" ? "جاري العمل" : "في الانتظار";
                     }
                 },
-                {orderable: true, searchable: false, data: "data"},
-                {orderable: true, searchable: true, data: "thread"},
+                {orderable: true, searchable: false, data: "create_date"},
+                {orderable: true, searchable: false, data: "update_date"},
+                {orderable: true, searchable: false, data: "thread_number"},
 
             ],
         });
