@@ -1,5 +1,5 @@
 <!doctype html>
-<title>{% block title %}{% endblock %} - Flaskr</title>
+<title>{% block title %}{% endblock %} - LokasBot</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <style>
     body {
@@ -7,7 +7,7 @@
     }
 </style>
 <nav>
-    <h1>App</h1>
+    <h1>LokasBot</h1>
     <ul>
         {% if g.user %}
             <li><span>{{ g.user['username'] }}</span>
