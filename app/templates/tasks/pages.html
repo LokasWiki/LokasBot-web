@@ -126,14 +126,17 @@
         });
 
         // Add custom search box for thread_number and status columns
-        $('#thread_number_search').on('keyup', function () {
-            table.columns(5).search(this.value).draw();
+        $('#thread-number-select').on('change', function () {
+            var threadNumber = $(this).val();
+            table.column(5).search(threadNumber).draw();
         });
 
         $('#status_search').on('change', function () {
-            table.columns(2).search(this.value).draw();
+            var status = $(this).val();
+            table.column(2).search(status).draw();
         });
     });
+
 </script>
 </body>
 </html>
