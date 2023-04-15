@@ -27,3 +27,4 @@ docs/_build/
 Requests
 users_this_week
 /__pycache__
+/.venv
