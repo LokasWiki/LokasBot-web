@@ -1,22 +1,42 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
-    <h1 class="my-2">قائمة الصفحات</h1>
-    <ul class="nav flex-column">
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('tasks.task_index',name='maintenance') }}"> تتبع حالة المهمة (بوت:صيانة
-                المقالات)</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('tasks.task_index',name='webcite') }}">تتبع حالة المهمة (بوت:الإبلاغ عن
-                رابط معطوب أو مؤرشف)</a>
-        </li>
-    </ul>
-    <h1 class="my-2">قائمة الأدوات</h1>
-    <ul class="nav flex-column">
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('words_count_page.words_count_tool') }}">حساب عدد الكلمات</a>
-        </li>
-    </ul>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow my-4 rounded-2">
+                    <div class="card-header">
+                        <h3 class="my-2">قائمة الصفحات</h3>
+                    </div>
+
+                <div class="card-body">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('tasks.task_index',name='maintenance') }}"> تتبع حالة المهمة (بوت:صيانة المقالات)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('tasks.task_index',name='webcite') }}">تتبع حالة المهمة (بوت:الإبلاغ عن رابط معطوب أو مؤرشف)</a>
+                        </li>
+                    </ul>
+
+                </div>
+    </div>
+
+                <div class="card shadow my-4 rounded-2">
+                    <div class="card-header">
+                        <h3 class="my-2">قائمة الأدوات</h3>
+                    </div>
+                <div class="card-body">
+
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('words_count_page.words_count_tool') }}">حساب عدد الكلمات</a>
+                        </li>
+                    </ul>
+                </div>
+    </div>
+
+            </div>
+        </div>
+    </div>
 {% endblock %}
