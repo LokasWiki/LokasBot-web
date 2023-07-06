@@ -31,4 +31,7 @@ Run locally
     cd {to the project folder}
     chmod +x run_local.sh
     ./run_local.sh
+   # run init-db command before first run
+   {from the project folder}.venv/bin/python -m flask init-db
+   
     ```
