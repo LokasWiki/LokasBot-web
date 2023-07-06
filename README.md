@@ -24,3 +24,11 @@ Deploy on Toolforge
     webservice --backend=kubernetes python3.9 start
     ```
     
+
+Run locally
+-----------
+-  ```
+    cd {to the project folder}
+    chmod +x run_local.sh
+    ./run_local.sh
+    ```
